@@ -11,7 +11,7 @@
     <div class="container">
         <div class="header">
             <h2>Library</h2>
-            <button>add+</button>
+            <button id="addBook">add+</button>
         </div>
         <div class="contents">
             <div class=card>
@@ -26,7 +26,40 @@
             <div>Made by Kirito(Discord:@rtrd_abhii)</div>
         </div>
     </div>
-    
+    <dialog id="addBookDialog" closedby="any">
+            <form method="dialog">
+                <div class="form-row">
+                    <label for="book-name">Name*:</label>
+                    <input type="text" id="book-name" name="book-name" required/>
+                </div><div class="form-row">
+                    <label for="author">Author*:</label>
+                    <input type="text" id="author" name="author" required/>
+                </div>
+                </div>
+                <div class="form-row">
+                    <label for="pages">Pages:</label>
+                    <input type="number" id="pages" name="pages" min="0" max="11,000" step="10"/>
+                </div>
+                </div>
+                <fieldset>
+                    <legend>Read Status*:</legend>
+                    <ul>
+                        <li>
+                            <label for="readdone">Read</label>
+                            <input type="radio" id="readdone" name="readStatus" value="true" checked required/>
+                        </li>
+                        <li>
+                            <label for="readnotdone">Not Read</label>
+                            <input type="radio" id="readnotdone" name="readStatus" value="false" required/>
+                        </li>
+                    </ul>
+                </fieldset>
+                <div class="buttons">
+                    <button type="submit">Submit</button>
+                    <button id="close" >Close </button>
+                </div>
+            </form>
+    </dialog>
     
     <script src="script.js">
     </script>

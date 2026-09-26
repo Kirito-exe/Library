@@ -16,10 +16,8 @@ function addBookToLibrary(name,author,pages,readStatus){
     myLibrary.push(book);
     return "done";
 }
-const content=document.querySelector(".contents");
-function displayBooks(){
-    for (let i=0;i<myLibrary.length;i++){
-        const div = document.createElement("div");
+function addCards(book){
+    const div = document.createElement("div");
         const header = document.createElement("h3");
         const author = document.createElement("div");
         const pages = document.createElement("div");
@@ -30,9 +28,28 @@ function displayBooks(){
         div.appendChild(author);
         div.appendChild(pages);
         div.appendChild(readStatus);
-        header.textContent=`Name: ${myLibrary[i].name}`;
-        author.textContent=`Author: ${myLibrary[i].author}`;
-        pages.textContent =`No. of pages: ${myLibrary[i].pages}`;
-        readStatus.textContent=`Read Status: ${myLibrary[i].readStatus}`;
-    }
+        header.textContent=`Name: ${book.name}`;
+        author.textContent=`Author: ${book.author}`;
+        pages.textContent =`No. of pages: ${book.pages}`;
+        readStatus.textContent=`Read Status: ${book.readStatus}`;
 }
+const content=document.querySelector(".contents");
+function displayBooks(){
+    for (let i=0;i<myLibrary.length;i++){
+        addCards(myLibrary[i]);
+    }   
+}
+const addBook = document.querySelector("#addBook");
+const dialog = document.querySelector("#addBookDialog")
+addBook.addEventListener("click",()=>{dialog.showModal()})
+const closeDialog = document.querySelector("#close");
+closeDialog.addEventListener("click",()=>{dialog.close()})
+const submit = document.querySelector("button[type='submit']");
+submit.addEventListener("click",function(){
+    const bookName = document.querySelector("#book-name");
+    const author = document.querySelector("#author");
+    const pages = document.querySelector("#pages");
+    const readStatus = document.querySelector("input[name='readStatus']:checked");
+    addBookToLibrary(bookName.value,author.value,parseInt(pages.value),readStatus.value);
+    addCards(myLibrary[myLibrary.length-1]);
+})

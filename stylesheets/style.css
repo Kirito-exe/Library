@@ -62,3 +62,60 @@ body{
     justify-content: space-around;
     align-items: start;
 }
+#addBookDialog{
+    padding: 2em;
+    border: none;
+    border-radius: 2px;
+    min-width: min-content;
+    width: min(30% , 500px);
+}
+fieldset ul{
+    list-style-type: none;
+}
+fieldset{
+    border: none;
+    padding: 1em 0.5em;
+}
+form > *{
+    padding: 1em 0.5em;
+}
+.form-row{
+    display: flex;
+    padding: 1em 0.5em;
+    flex-direction: column;
+}
+.form-row input[type="text"],input[type="number"]{
+    border: none;
+    padding: 0.5em 1em;
+    border-radius: 10px;
+    background-color: rgb(240, 240, 241);
+}
+label,legend{
+    font-weight: bold;
+}
+li label{
+    margin: 0px 1em;
+}
+ul li{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+.buttons{
+    display: flex;
+    justify-content: space-around;
+    gap:1em;
+}
+.buttons > *{
+    padding: 0.7em 2em;
+    border: none;
+    font-weight: bold;
+    border-radius: 10px;
+}
+.buttons button[type="submit"]{
+    background-color: rgb(17, 13, 56);
+    color:white;
+}
+#close{
+    color:rgb(17, 13, 56);
+}
