@@ -95,4 +95,6 @@ dialog.addEventListener("close",function(){
         arr[i].value = "";
     }
 })
+// const deleteBook = document.querySelector(".bookDel");
+
 displayBooks();
