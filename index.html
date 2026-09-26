@@ -19,6 +19,7 @@
                 <div>Author</div>
                 <div>Pages</div>
                 <div>Read Status</div>
+                <button class="bookDel">Delete</button>
             </div>
             
         </div>
@@ -28,17 +29,19 @@
     </div>
     <dialog id="addBookDialog" closedby="any">
             <form method="dialog">
-                <div class="form-row">
+                <div class="form-row" id="name-form-row">
                     <label for="book-name">Name*:</label>
                     <input type="text" id="book-name" name="book-name" required/>
-                </div><div class="form-row">
+                    <div></div>
+                </div><div class="form-row" id="author-form-row">
                     <label for="author">Author*:</label>
-                    <input type="text" id="author" name="author" required/>
+                    <input autocomplete="off" type="text" id="author" name="author" required/>
+                    <div></div>
                 </div>
                 </div>
                 <div class="form-row">
                     <label for="pages">Pages:</label>
-                    <input type="number" id="pages" name="pages" min="0" max="11,000" step="10"/>
+                    <input type="number" id="pages" name="pages" min="0" max="11,000" step="1"/>
                 </div>
                 </div>
                 <fieldset>
@@ -46,11 +49,11 @@
                     <ul>
                         <li>
                             <label for="readdone">Read</label>
-                            <input type="radio" id="readdone" name="readStatus" value="true" checked required/>
+                            <input type="radio" id="readdone" name="readStatus" value="done reading" required/>
                         </li>
                         <li>
                             <label for="readnotdone">Not Read</label>
-                            <input type="radio" id="readnotdone" name="readStatus" value="false" required/>
+                            <input type="radio" id="readnotdone" name="readStatus" value="not done reading" checked required/>
                         </li>
                     </ul>
                 </fieldset>

@@ -51,7 +51,7 @@ body{
 .contents .card{
     padding: 2em;
     background-color: white;
-    border-radius: 3px;
+    border-radius: 7px;
     border: none;
     max-width: 450px;
     box-shadow: 2px 2px solid rgb(217, 217, 217);
@@ -60,7 +60,20 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    border-left: 7px solid rgb(17, 13, 56);
     align-items: start;
+    position: relative;
+}
+.bookDel{
+    align-self: end;
+    padding: 0.8em 1.2em;
+    border: none;
+    font-weight: bold;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    color: white;
+    background-color: rgb(215, 8, 8);
+    
 }
 #addBookDialog{
     padding: 2em;
@@ -118,4 +131,12 @@ ul li{
 }
 #close{
     color:rgb(17, 13, 56);
+}
+#book-name::after{
+    content:"Required";
+    color: rgb(17, 13, 56);
+    font-weight: bold;
+}
+.form-row div{
+    color: red;
 }

@@ -28,6 +28,7 @@ function addCards(book){
         div.appendChild(author);
         div.appendChild(pages);
         div.appendChild(readStatus);
+        div.setAttribute('data-id', book.id)
         header.textContent=`Name: ${book.name}`;
         author.textContent=`Author: ${book.author}`;
         pages.textContent =`No. of pages: ${book.pages}`;
@@ -35,7 +36,12 @@ function addCards(book){
 }
 const content=document.querySelector(".contents");
 function displayBooks(){
+    const contentList =document.querySelectorAll(".contents");
+    const contentarr = Array.from(contentList);
     for (let i=0;i<myLibrary.length;i++){
+        if (contentarr.includes(myLibrary[i])){
+            return "already in Library";
+        }
         addCards(myLibrary[i]);
     }   
 }
@@ -45,11 +51,48 @@ addBook.addEventListener("click",()=>{dialog.showModal()})
 const closeDialog = document.querySelector("#close");
 closeDialog.addEventListener("click",()=>{dialog.close()})
 const submit = document.querySelector("button[type='submit']");
-submit.addEventListener("click",function(){
+submit.addEventListener("click",function(event){
     const bookName = document.querySelector("#book-name");
     const author = document.querySelector("#author");
     const pages = document.querySelector("#pages");
+    console.log(bookName.value);
+    const nameRequiredDiv = document.querySelector("#name-form-row div");
+    
+    const authorRequiredDiv = document.querySelector("#author-form-row div");
+    if((author.value.trim()==="" || author.value===null)&&(bookName.value.trim()==="" || bookName.value===null)){
+        authorRequiredDiv.textContent="required";
+        nameRequiredDiv.textContent="required";
+        event.preventDefault();
+        return;
+    }
+    else if(bookName.value.trim()==="" || bookName.value===null){
+        nameRequiredDiv.textContent="required";
+        authorRequiredDiv.textContent=''
+        event.preventDefault();
+        return;
+    }
+    else if(author.value.trim()==="" || author.value===null){
+        authorRequiredDiv.textContent="required";
+        nameRequiredDiv.textContent=''
+        event.preventDefault();
+        return;
+    }else{
+        if(authorRequiredDiv){authorRequiredDiv.textContent=''};
+        if(nameRequiredDiv){nameRequiredDiv.textContent=''};
+    }
+
+    if(pages.value.trim()==="" || pages.value===null) {pages.value=0};
     const readStatus = document.querySelector("input[name='readStatus']:checked");
     addBookToLibrary(bookName.value,author.value,parseInt(pages.value),readStatus.value);
     addCards(myLibrary[myLibrary.length-1]);
 })
+dialog.addEventListener("close",function(){
+    const bookName = document.querySelector("#book-name");
+    const author = document.querySelector("#author");
+    const pages = document.querySelector("#pages");
+    let arr = [bookName,author,pages];
+    for(let i=0;i<arr.length;i++){
+        arr[i].value = "";
+    }
+})
+displayBooks();
