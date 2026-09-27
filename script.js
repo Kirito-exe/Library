@@ -17,17 +17,21 @@ function addBookToLibrary(name,author,pages,readStatus){
     return "done";
 }
 function addCards(book){
-    const div = document.createElement("div");
+        const div = document.createElement("div");
         const header = document.createElement("h3");
         const author = document.createElement("div");
         const pages = document.createElement("div");
         const readStatus = document.createElement("div");
+        const delButton = document.createElement("button");
+        delButton.setAttribute("class","bookDel");
+        delButton.textContent="Delete";
         content.appendChild(div);
         div.setAttribute("class","card");
         div.appendChild(header);
         div.appendChild(author);
         div.appendChild(pages);
         div.appendChild(readStatus);
+        div.appendChild(delButton);
         div.setAttribute('data-id', book.id)
         header.textContent=`Name: ${book.name}`;
         author.textContent=`Author: ${book.author}`;
@@ -35,9 +39,10 @@ function addCards(book){
         readStatus.textContent=`Read Status: ${book.readStatus}`;
 }
 const content=document.querySelector(".contents");
+const contentList =document.querySelectorAll(".contents");
+const contentarr = Array.from(contentList);
 function displayBooks(){
-    const contentList =document.querySelectorAll(".contents");
-    const contentarr = Array.from(contentList);
+    
     for (let i=0;i<myLibrary.length;i++){
         if (contentarr.includes(myLibrary[i])){
             return "already in Library";
@@ -55,7 +60,6 @@ submit.addEventListener("click",function(event){
     const bookName = document.querySelector("#book-name");
     const author = document.querySelector("#author");
     const pages = document.querySelector("#pages");
-    console.log(bookName.value);
     const nameRequiredDiv = document.querySelector("#name-form-row div");
     
     const authorRequiredDiv = document.querySelector("#author-form-row div");
@@ -85,6 +89,18 @@ submit.addEventListener("click",function(event){
     const readStatus = document.querySelector("input[name='readStatus']:checked");
     addBookToLibrary(bookName.value,author.value,parseInt(pages.value),readStatus.value);
     addCards(myLibrary[myLibrary.length-1]);
+    bookDelList = document.querySelectorAll(".bookDel");
+    bookDelList.forEach((card)=>{
+        card.addEventListener("click",function(event){
+             for(let i=0;i<myLibrary.length;i++){
+                if(myLibrary[i].id = card.parentNode.dataset.id){
+                    myLibrary.pop(myLibrary[i]);
+                    content.removeChild(card.parentNode);
+                }
+             }
+            event.stopPropagation();
+        })
+    })
 })
 dialog.addEventListener("close",function(){
     const bookName = document.querySelector("#book-name");
@@ -95,6 +111,6 @@ dialog.addEventListener("close",function(){
         arr[i].value = "";
     }
 })
-// const deleteBook = document.querySelector(".bookDel");
+let bookDelList = document.querySelectorAll(".bookDel");
 
 displayBooks();
