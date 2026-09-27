@@ -14,6 +14,29 @@ function addBookToLibrary(name,author,pages,readStatus){
     let rndmid = crypto.randomUUID();
     let book = new Book(rndmid,name,author,pages,readStatus);
     myLibrary.push(book);
+    addCards(book);
+    bookDelList = document.querySelectorAll(".bookDel");
+    bookDelList.forEach((card)=>{
+        card.addEventListener("click",function(event){
+             for(let i=0;i<myLibrary.length;i++){
+                if(myLibrary[i].id = card.parentNode.parentNode.dataset.id){
+                    myLibrary.pop(myLibrary[i]);
+                    content.removeChild(card.parentNode.parentNode);
+                }
+             }
+        })
+    })
+    let toggleReadList = document.querySelectorAll(".toggle-read");
+    toggleReadList.forEach((button)=>{
+        button.addEventListener("click",function(){
+            for(let i=0;i<myLibrary.length;i++){
+                if(myLibrary[i].id = button.parentNode.parentNode.dataset.id){
+                myLibrary[i].toggleread();
+                console.log("accesssed");
+            }
+            }
+        })
+    })
     return "done";
 }
 function addCards(book){
@@ -22,16 +45,24 @@ function addCards(book){
         const author = document.createElement("div");
         const pages = document.createElement("div");
         const readStatus = document.createElement("div");
+        const buttons = document.createElement("div");
+        buttons.setAttribute("class","buttons")
+        readStatus.setAttribute("class","readStatus");
+        const toggleRead = document.createElement("button");
+        toggleRead.textContent="Toggle Read";
+        toggleRead.setAttribute("class","toggle-read");
         const delButton = document.createElement("button");
         delButton.setAttribute("class","bookDel");
         delButton.textContent="Delete";
         content.appendChild(div);
         div.setAttribute("class","card");
+        buttons.appendChild(toggleRead);
+        buttons.appendChild(delButton);
         div.appendChild(header);
         div.appendChild(author);
         div.appendChild(pages);
         div.appendChild(readStatus);
-        div.appendChild(delButton);
+        div.appendChild(buttons);
         div.setAttribute('data-id', book.id)
         header.textContent=`Name: ${book.name}`;
         author.textContent=`Author: ${book.author}`;
@@ -39,7 +70,7 @@ function addCards(book){
         readStatus.textContent=`Read Status: ${book.readStatus}`;
 }
 const content=document.querySelector(".contents");
-const contentList =document.querySelectorAll(".contents");
+let contentList =document.querySelectorAll(".contents");
 const contentarr = Array.from(contentList);
 function displayBooks(){
     
@@ -88,17 +119,27 @@ submit.addEventListener("click",function(event){
     if(pages.value.trim()==="" || pages.value===null) {pages.value=0};
     const readStatus = document.querySelector("input[name='readStatus']:checked");
     addBookToLibrary(bookName.value,author.value,parseInt(pages.value),readStatus.value);
-    addCards(myLibrary[myLibrary.length-1]);
     bookDelList = document.querySelectorAll(".bookDel");
     bookDelList.forEach((card)=>{
         card.addEventListener("click",function(event){
              for(let i=0;i<myLibrary.length;i++){
-                if(myLibrary[i].id = card.parentNode.dataset.id){
+                if(myLibrary[i].id = card.parentNode.parentNode.dataset.id){
                     myLibrary.pop(myLibrary[i]);
-                    content.removeChild(card.parentNode);
+                    content.removeChild(card.parentNode.parentNode);
                 }
              }
             event.stopPropagation();
+        })
+    })
+    let toggleReadList = document.querySelectorAll(".toggle-read");
+    toggleReadList.forEach((button)=>{
+        button.addEventListener("click",function(){
+            for(let i=0;i<myLibrary.length;i++){
+                if(myLibrary[i].id = button.parentNode.parentNode.dataset.id){
+                myLibrary[i].toggleread();
+                console.log("accesssed");
+            }
+            }
         })
     })
 })
@@ -112,5 +153,14 @@ dialog.addEventListener("close",function(){
     }
 })
 let bookDelList = document.querySelectorAll(".bookDel");
-
+Book.prototype.toggleread = function(){
+    if(this.readStatus==="done reading"){
+        this.readStatus="not done reading";
+    }else{
+        this.readStatus="done reading";
+    }
+    let card = document.querySelector(`.card[data-id="${this.id}"]`);
+    let readStatus = card.querySelector(".readStatus");
+    readStatus.textContent = `Read Status: ${this.readStatus}`;
+}
 displayBooks();
