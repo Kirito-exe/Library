@@ -1,5 +1,5 @@
 body{
-    height: 100vh;
+    height: 100%;
     background-color: rgb(210, 210, 213);
     font-family: 'Times New Roman', Times, serif;
 }
@@ -10,6 +10,8 @@ body{
     grid-template-rows:min-content 1fr min-content;
     min-width: 520px;
     align-items: start;
+    align-content: stretch;
+    justify-content: stretch;
 }
 
 .header button{
