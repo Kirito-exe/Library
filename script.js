@@ -1,21 +1,17 @@
 const myLibrary=[];
-function Book(id,name,author,pages,readStatus){
+function Book(name,author,pages,readStatus){
     if(!new.target){
         console.log("define with new")
         return;
     }
-    this.id=id;
+    this.id=crypto.randomUUID();
     this.name=name;
     this.author=author;
     this.pages=pages;
     this.readStatus=readStatus;
 }
-function addBookToLibrary(name,author,pages,readStatus){
-    let rndmid = crypto.randomUUID();
-    let book = new Book(rndmid,name,author,pages,readStatus);
-    myLibrary.push(book);
-    addCards(book);
-    bookDelList = document.querySelectorAll(".bookDel");
+function delBooks(){
+    let bookDelList = document.querySelectorAll(".bookDel");
     bookDelList.forEach((card)=>{
         card.addEventListener("click",function(event){
              for(let i=0;i<myLibrary.length;i++){
@@ -26,17 +22,33 @@ function addBookToLibrary(name,author,pages,readStatus){
              }
         })
     })
+}
+function toggleReading(){
     let toggleReadList = document.querySelectorAll(".toggle-read");
     toggleReadList.forEach((button)=>{
         button.addEventListener("click",function(){
+            let card = button.parentNode.parentNode;
+            let readStatus = card.querySelector(".readStatus");
             for(let i=0;i<myLibrary.length;i++){
                 if(myLibrary[i].id = button.parentNode.parentNode.dataset.id){
                 myLibrary[i].toggleread();
                 console.log("accesssed");
+                if(readStatus.textContent==="Read Status: done reading"){
+                    button.setAttribute("style","background-color:rgb(215, 8, 8)");
+                }else{
+                    button.setAttribute("style","background-color:green");
+                }
             }
             }
         })
     })
+}
+function addBookToLibrary(name,author,pages,readStatus){
+    let book = new Book(name,author,pages,readStatus);
+    myLibrary.push(book);
+    addCards(book);
+    delBooks();
+    toggleReading();
     return "done";
 }
 function addCards(book){
@@ -68,6 +80,11 @@ function addCards(book){
         author.textContent=`Author: ${book.author}`;
         pages.textContent =`No. of pages: ${book.pages}`;
         readStatus.textContent=`Read Status: ${book.readStatus}`;
+        if(readStatus.textContent==="Read Status: done reading"){
+                    toggleRead.setAttribute("style","background-color:rgb(215, 8, 8)");
+                }else{
+                    toggleRead.setAttribute("style","background-color:green");
+                }
 }
 const content=document.querySelector(".contents");
 let contentList =document.querySelectorAll(".contents");
@@ -80,6 +97,8 @@ function displayBooks(){
         }
         addCards(myLibrary[i]);
     }   
+    delBooks();
+    toggleReading();
 }
 const addBook = document.querySelector("#addBook");
 const dialog = document.querySelector("#addBookDialog")
@@ -119,29 +138,6 @@ submit.addEventListener("click",function(event){
     if(pages.value.trim()==="" || pages.value===null) {pages.value=0};
     const readStatus = document.querySelector("input[name='readStatus']:checked");
     addBookToLibrary(bookName.value,author.value,parseInt(pages.value),readStatus.value);
-    bookDelList = document.querySelectorAll(".bookDel");
-    bookDelList.forEach((card)=>{
-        card.addEventListener("click",function(event){
-             for(let i=0;i<myLibrary.length;i++){
-                if(myLibrary[i].id = card.parentNode.parentNode.dataset.id){
-                    myLibrary.pop(myLibrary[i]);
-                    content.removeChild(card.parentNode.parentNode);
-                }
-             }
-            event.stopPropagation();
-        })
-    })
-    let toggleReadList = document.querySelectorAll(".toggle-read");
-    toggleReadList.forEach((button)=>{
-        button.addEventListener("click",function(){
-            for(let i=0;i<myLibrary.length;i++){
-                if(myLibrary[i].id = button.parentNode.parentNode.dataset.id){
-                myLibrary[i].toggleread();
-                console.log("accesssed");
-            }
-            }
-        })
-    })
 })
 dialog.addEventListener("close",function(){
     const bookName = document.querySelector("#book-name");
@@ -152,7 +148,6 @@ dialog.addEventListener("close",function(){
         arr[i].value = "";
     }
 })
-let bookDelList = document.querySelectorAll(".bookDel");
 Book.prototype.toggleread = function(){
     if(this.readStatus==="done reading"){
         this.readStatus="not done reading";
@@ -163,4 +158,6 @@ Book.prototype.toggleread = function(){
     let readStatus = card.querySelector(".readStatus");
     readStatus.textContent = `Read Status: ${this.readStatus}`;
 }
+myLibrary[0]= new Book('C++ Primer','Stanley B. Lippman',969,'not done reading')
+myLibrary[1]= new Book('SSS class suicide hunter','Sinnoa',344,'done reading')
 displayBooks();
