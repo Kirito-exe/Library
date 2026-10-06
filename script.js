@@ -1,21 +1,43 @@
 const myLibrary=[];
-function Book(name,author,pages,readStatus){
-    if(!new.target){
-        console.log("define with new")
-        return;
+// function Book(name,author,pages,readStatus){
+//     if(!new.target){
+//         console.log("define with new")
+//         return;
+//     }
+//     this.id=crypto.randomUUID();
+//     this.name=name;
+//     this.author=author;
+//     this.pages=pages;
+//     this.readStatus=readStatus;
+// }
+class Book{
+    #id=crypto.randomUUID();
+    constructor(name,author,pages,readStatus){
+        this.name = name;
+        this.author = author;
+        this.pages = pages;
+        this.readStatus=readStatus;
     }
-    this.id=crypto.randomUUID();
-    this.name=name;
-    this.author=author;
-    this.pages=pages;
-    this.readStatus=readStatus;
+    get getId(){
+        return this.#id;
+    }
+    toggleread (){
+        if(this.readStatus==="done reading"){
+            this.readStatus="not done reading";
+        }else{
+            this.readStatus="done reading";
+        }
+        let card = document.querySelector(`.card[data-id="${this.#id}"]`);
+        let readStatus = card.querySelector(".readStatus");
+        readStatus.textContent = `Read Status: ${this.readStatus}`;
+    }   
 }
 function delBooks(){
     let bookDelList = document.querySelectorAll(".bookDel");
     bookDelList.forEach((card)=>{
         card.addEventListener("click",function(event){
              for(let i=0;i<myLibrary.length;i++){
-                if(myLibrary[i].id = card.parentNode.parentNode.dataset.id){
+                if(myLibrary[i].getId === card.parentNode.parentNode.dataset.id){
                     myLibrary.pop(myLibrary[i]);
                     content.removeChild(card.parentNode.parentNode);
                 }
@@ -30,9 +52,8 @@ function toggleReading(){
             let card = button.parentNode.parentNode;
             let readStatus = card.querySelector(".readStatus");
             for(let i=0;i<myLibrary.length;i++){
-                if(myLibrary[i].id = button.parentNode.parentNode.dataset.id){
+                if(myLibrary[i].getId === button.parentNode.parentNode.dataset.id){
                 myLibrary[i].toggleread();
-                console.log("accesssed");
                 if(readStatus.textContent==="Read Status: done reading"){
                     button.setAttribute("style","background-color:rgb(215, 8, 8)");
                 }else{
@@ -75,7 +96,7 @@ function addCards(book){
         div.appendChild(pages);
         div.appendChild(readStatus);
         div.appendChild(buttons);
-        div.setAttribute('data-id', book.id)
+        div.setAttribute('data-id', book.getId)
         header.textContent=`Name: ${book.name}`;
         author.textContent=`Author: ${book.author}`;
         pages.textContent =`No. of pages: ${book.pages}`;
@@ -148,16 +169,6 @@ dialog.addEventListener("close",function(){
         arr[i].value = "";
     }
 })
-Book.prototype.toggleread = function(){
-    if(this.readStatus==="done reading"){
-        this.readStatus="not done reading";
-    }else{
-        this.readStatus="done reading";
-    }
-    let card = document.querySelector(`.card[data-id="${this.id}"]`);
-    let readStatus = card.querySelector(".readStatus");
-    readStatus.textContent = `Read Status: ${this.readStatus}`;
-}
 myLibrary[0]= new Book('C++ Primer','Stanley B. Lippman',969,'not done reading')
 myLibrary[1]= new Book('SSS class suicide hunter','Sinnoa',344,'done reading')
 displayBooks();
