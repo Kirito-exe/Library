@@ -1,4 +1,4 @@
-const myLibrary=[];
+const myLibrary = [];
 // function Book(name,author,pages,readStatus){
 //     if(!new.target){
 //         console.log("define with new")
@@ -10,165 +10,187 @@ const myLibrary=[];
 //     this.pages=pages;
 //     this.readStatus=readStatus;
 // }
-class Book{
-    #id=crypto.randomUUID();
-    constructor(name,author,pages,readStatus){
-        this.name = name;
-        this.author = author;
-        this.pages = pages;
-        this.readStatus=readStatus;
+class Book {
+  #id = crypto.randomUUID();
+  constructor(name, author, pages, readStatus) {
+    this.name = name;
+    this.author = author;
+    this.pages = pages;
+    this.readStatus = readStatus;
+  }
+  get getId() {
+    return this.#id;
+  }
+  toggleread() {
+    if (this.readStatus === "done reading") {
+      this.readStatus = "not done reading";
+    } else {
+      this.readStatus = "done reading";
     }
-    get getId(){
-        return this.#id;
-    }
-    toggleread (){
-        if(this.readStatus==="done reading"){
-            this.readStatus="not done reading";
-        }else{
-            this.readStatus="done reading";
+    let card = document.querySelector(`.card[data-id="${this.#id}"]`);
+    let readStatus = card.querySelector(".readStatus");
+    readStatus.textContent = `Read Status: ${this.readStatus}`;
+  }
+}
+function delBooks() {
+  let bookDelList = document.querySelectorAll(".bookDel");
+  bookDelList.forEach((card) => {
+    card.addEventListener("click", function (event) {
+      for (let i = 0; i < myLibrary.length; i++) {
+        if (myLibrary[i].getId === card.parentNode.parentNode.dataset.id) {
+          myLibrary.pop(myLibrary[i]);
+          content.removeChild(card.parentNode.parentNode);
         }
-        let card = document.querySelector(`.card[data-id="${this.#id}"]`);
-        let readStatus = card.querySelector(".readStatus");
-        readStatus.textContent = `Read Status: ${this.readStatus}`;
-    }   
+      }
+    });
+  });
 }
-function delBooks(){
-    let bookDelList = document.querySelectorAll(".bookDel");
-    bookDelList.forEach((card)=>{
-        card.addEventListener("click",function(event){
-             for(let i=0;i<myLibrary.length;i++){
-                if(myLibrary[i].getId === card.parentNode.parentNode.dataset.id){
-                    myLibrary.pop(myLibrary[i]);
-                    content.removeChild(card.parentNode.parentNode);
-                }
-             }
-        })
-    })
+function toggleReading() {
+  let toggleReadList = document.querySelectorAll(".toggle-read");
+  toggleReadList.forEach((button) => {
+    button.addEventListener("click", function () {
+      let card = button.parentNode.parentNode;
+      let readStatus = card.querySelector(".readStatus");
+      for (let i = 0; i < myLibrary.length; i++) {
+        if (myLibrary[i].getId === button.parentNode.parentNode.dataset.id) {
+          myLibrary[i].toggleread();
+          if (readStatus.textContent === "Read Status: done reading") {
+            button.setAttribute("style", "background-color:rgb(215, 8, 8)");
+          } else {
+            button.setAttribute("style", "background-color:green");
+          }
+        }
+      }
+    });
+  });
 }
-function toggleReading(){
-    let toggleReadList = document.querySelectorAll(".toggle-read");
-    toggleReadList.forEach((button)=>{
-        button.addEventListener("click",function(){
-            let card = button.parentNode.parentNode;
-            let readStatus = card.querySelector(".readStatus");
-            for(let i=0;i<myLibrary.length;i++){
-                if(myLibrary[i].getId === button.parentNode.parentNode.dataset.id){
-                myLibrary[i].toggleread();
-                if(readStatus.textContent==="Read Status: done reading"){
-                    button.setAttribute("style","background-color:rgb(215, 8, 8)");
-                }else{
-                    button.setAttribute("style","background-color:green");
-                }
-            }
-            }
-        })
-    })
+function addBookToLibrary(name, author, pages, readStatus) {
+  let book = new Book(name, author, pages, readStatus);
+  myLibrary.push(book);
+  addCards(book);
+  delBooks();
+  toggleReading();
+  return "done";
 }
-function addBookToLibrary(name,author,pages,readStatus){
-    let book = new Book(name,author,pages,readStatus);
-    myLibrary.push(book);
-    addCards(book);
-    delBooks();
-    toggleReading();
-    return "done";
+function addCards(book) {
+  const div = document.createElement("div");
+  const header = document.createElement("h3");
+  const author = document.createElement("div");
+  const pages = document.createElement("div");
+  const readStatus = document.createElement("div");
+  const buttons = document.createElement("div");
+  buttons.setAttribute("class", "buttons");
+  readStatus.setAttribute("class", "readStatus");
+  const toggleRead = document.createElement("button");
+  toggleRead.textContent = "Toggle Read";
+  toggleRead.setAttribute("class", "toggle-read");
+  const delButton = document.createElement("button");
+  delButton.setAttribute("class", "bookDel");
+  delButton.textContent = "Delete";
+  content.appendChild(div);
+  div.setAttribute("class", "card");
+  buttons.appendChild(toggleRead);
+  buttons.appendChild(delButton);
+  div.appendChild(header);
+  div.appendChild(author);
+  div.appendChild(pages);
+  div.appendChild(readStatus);
+  div.appendChild(buttons);
+  div.setAttribute("data-id", book.getId);
+  header.textContent = `Name: ${book.name}`;
+  author.textContent = `Author: ${book.author}`;
+  pages.textContent = `No. of pages: ${book.pages}`;
+  readStatus.textContent = `Read Status: ${book.readStatus}`;
+  if (readStatus.textContent === "Read Status: done reading") {
+    toggleRead.setAttribute("style", "background-color:rgb(215, 8, 8)");
+  } else {
+    toggleRead.setAttribute("style", "background-color:green");
+  }
 }
-function addCards(book){
-        const div = document.createElement("div");
-        const header = document.createElement("h3");
-        const author = document.createElement("div");
-        const pages = document.createElement("div");
-        const readStatus = document.createElement("div");
-        const buttons = document.createElement("div");
-        buttons.setAttribute("class","buttons")
-        readStatus.setAttribute("class","readStatus");
-        const toggleRead = document.createElement("button");
-        toggleRead.textContent="Toggle Read";
-        toggleRead.setAttribute("class","toggle-read");
-        const delButton = document.createElement("button");
-        delButton.setAttribute("class","bookDel");
-        delButton.textContent="Delete";
-        content.appendChild(div);
-        div.setAttribute("class","card");
-        buttons.appendChild(toggleRead);
-        buttons.appendChild(delButton);
-        div.appendChild(header);
-        div.appendChild(author);
-        div.appendChild(pages);
-        div.appendChild(readStatus);
-        div.appendChild(buttons);
-        div.setAttribute('data-id', book.getId)
-        header.textContent=`Name: ${book.name}`;
-        author.textContent=`Author: ${book.author}`;
-        pages.textContent =`No. of pages: ${book.pages}`;
-        readStatus.textContent=`Read Status: ${book.readStatus}`;
-        if(readStatus.textContent==="Read Status: done reading"){
-                    toggleRead.setAttribute("style","background-color:rgb(215, 8, 8)");
-                }else{
-                    toggleRead.setAttribute("style","background-color:green");
-                }
-}
-const content=document.querySelector(".contents");
-let contentList =document.querySelectorAll(".contents");
+const content = document.querySelector(".contents");
+let contentList = document.querySelectorAll(".contents");
 const contentarr = Array.from(contentList);
-function displayBooks(){
-    
-    for (let i=0;i<myLibrary.length;i++){
-        if (contentarr.includes(myLibrary[i])){
-            return "already in Library";
-        }
-        addCards(myLibrary[i]);
-    }   
-    delBooks();
-    toggleReading();
+function displayBooks() {
+  for (let i = 0; i < myLibrary.length; i++) {
+    if (contentarr.includes(myLibrary[i])) {
+      return "already in Library";
+    }
+    addCards(myLibrary[i]);
+  }
+  delBooks();
+  toggleReading();
 }
 const addBook = document.querySelector("#addBook");
-const dialog = document.querySelector("#addBookDialog")
-addBook.addEventListener("click",()=>{dialog.showModal()})
+const dialog = document.querySelector("#addBookDialog");
+addBook.addEventListener("click", () => {
+  dialog.showModal();
+});
 const closeDialog = document.querySelector("#close");
-closeDialog.addEventListener("click",()=>{dialog.close()})
+closeDialog.addEventListener("click", () => {
+  dialog.close();
+});
 const submit = document.querySelector("button[type='submit']");
-submit.addEventListener("click",function(event){
-    const bookName = document.querySelector("#book-name");
-    const author = document.querySelector("#author");
-    const pages = document.querySelector("#pages");
-    const nameRequiredDiv = document.querySelector("#name-form-row div");
-    
-    const authorRequiredDiv = document.querySelector("#author-form-row div");
-    if((author.value.trim()==="" || author.value===null)&&(bookName.value.trim()==="" || bookName.value===null)){
-        authorRequiredDiv.textContent="required";
-        nameRequiredDiv.textContent="required";
-        event.preventDefault();
-        return;
-    }
-    else if(bookName.value.trim()==="" || bookName.value===null){
-        nameRequiredDiv.textContent="required";
-        authorRequiredDiv.textContent=''
-        event.preventDefault();
-        return;
-    }
-    else if(author.value.trim()==="" || author.value===null){
-        authorRequiredDiv.textContent="required";
-        nameRequiredDiv.textContent=''
-        event.preventDefault();
-        return;
-    }else{
-        if(authorRequiredDiv){authorRequiredDiv.textContent=''};
-        if(nameRequiredDiv){nameRequiredDiv.textContent=''};
-    }
+submit.addEventListener("click", function (event) {
+  const bookName = document.querySelector("#book-name");
+  const author = document.querySelector("#author");
+  const pages = document.querySelector("#pages");
+  const nameRequiredDiv = document.querySelector("#name-form-row div");
 
-    if(pages.value.trim()==="" || pages.value===null) {pages.value=0};
-    const readStatus = document.querySelector("input[name='readStatus']:checked");
-    addBookToLibrary(bookName.value,author.value,parseInt(pages.value),readStatus.value);
-})
-dialog.addEventListener("close",function(){
-    const bookName = document.querySelector("#book-name");
-    const author = document.querySelector("#author");
-    const pages = document.querySelector("#pages");
-    let arr = [bookName,author,pages];
-    for(let i=0;i<arr.length;i++){
-        arr[i].value = "";
+  const authorRequiredDiv = document.querySelector("#author-form-row div");
+  if (author.validity.valueMissing && bookName.validity.valueMissing) {
+    authorRequiredDiv.textContent = "required";
+    nameRequiredDiv.textContent = "required";
+    event.preventDefault();
+    return;
+  } else if (bookName.validity.valueMissing) {
+    nameRequiredDiv.textContent = "required";
+    authorRequiredDiv.textContent = "";
+    event.preventDefault();
+    return;
+  } else if (author.validity.valueMissing) {
+    authorRequiredDiv.textContent = "required";
+    nameRequiredDiv.textContent = "";
+    event.preventDefault();
+    return;
+  } else {
+    if (authorRequiredDiv) {
+      authorRequiredDiv.textContent = "";
     }
-})
-myLibrary[0]= new Book('C++ Primer','Stanley B. Lippman',969,'not done reading')
-myLibrary[1]= new Book('SSS class suicide hunter','Sinnoa',344,'done reading')
+    if (nameRequiredDiv) {
+      nameRequiredDiv.textContent = "";
+    }
+  }
+
+  if (pages.validity.valueMissing) {
+    pages.value = 0;
+  }
+  const readStatus = document.querySelector("input[name='readStatus']:checked");
+  addBookToLibrary(
+    bookName.value,
+    author.value,
+    parseInt(pages.value),
+    readStatus.value,
+  );
+});
+dialog.addEventListener("close", function () {
+  const bookName = document.querySelector("#book-name");
+  const author = document.querySelector("#author");
+  const pages = document.querySelector("#pages");
+  let arr = [bookName, author, pages];
+  for (let i = 0; i < arr.length; i++) {
+    arr[i].value = "";
+  }
+});
+myLibrary[0] = new Book(
+  "C++ Primer",
+  "Stanley B. Lippman",
+  969,
+  "not done reading",
+);
+myLibrary[1] = new Book(
+  "SSS class suicide hunter",
+  "Sinnoa",
+  344,
+  "done reading",
+);
 displayBooks();
